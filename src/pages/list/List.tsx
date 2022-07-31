@@ -1,24 +1,26 @@
 import { useLocation } from "react-router-dom";
 import { useState } from "react";
 import { format } from "date-fns";
-import { DateRange } from "react-date-range";
+import { DateRange, Range } from "react-date-range";
 import styled from "styled-components";
 
 import Header from "components/header/Header";
 import Navbar from "components/navbar/Navbar";
+import SearchItem from "components/searchItem/SearchItem";
 
 interface State {
   destination: string;
-  dates: string[];
+  dates: Range[];
   options: { adult: string; children: string; room: string };
 }
 
 const List = () => {
   const location = useLocation() as { state: State };
+  console.log(location);
   const [destination, setDestination] = useState(location.state.destination);
-  const [dates, setDates] = useState(location.state.dates);
-  const [openDate, setOpenDate] = useState(false);
+  const [dates, setDates] = useState<Range[]>(location.state.dates);
   const [options, setOptions] = useState(location.state.options);
+  const [openDate, setOpenDate] = useState(false);
   const [min, setMin] = useState("");
   const [max, setMax] = useState("");
 
@@ -42,12 +44,12 @@ const List = () => {
               <label>Destination</label>
               <input placeholder={destination} type="text" />
             </Item>
-            {/* <Item>
+            <Item>
               <label>Check-in Date</label>
               <span onClick={() => setOpenDate(!openDate)}>{`${format(
-                dates[0].startDate,
+                dates[0].startDate!,
                 "MM/dd/yyyy"
-              )} to ${format(dates[0].endDate, "MM/dd/yyyy")}`}</span>
+              )} to ${format(dates[0].endDate!, "MM/dd/yyyy")}`}</span>
               {openDate && (
                 <DateRange
                   onChange={(item) => setDates([item.selection])}
@@ -55,7 +57,7 @@ const List = () => {
                   ranges={dates}
                 />
               )}
-            </Item> */}
+            </Item>
             <Item>
               <label>Options</label>
               <Options>
@@ -94,9 +96,11 @@ const List = () => {
             <Button onClick={handleClick}>Search</Button>
           </ListSearch>
           <Result>
-            {/* {loading ? (
+            {/* {
+            loading ? (
               "loading"
-            ) : (
+            ) : 
+            (
               <>
                 {data.map((item) => (
                   <SearchItem item={item} key={item._id} />

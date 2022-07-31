@@ -34,7 +34,7 @@ const Footer = () => {
           <ListItem>Travel Agents </ListItem>
         </List>
         <List>
-          <ListItem>Curtomer Service</ListItem>
+          <ListItem>Customer Service</ListItem>
           <ListItem>Partner Help</ListItem>
           <ListItem>Careers</ListItem>
           <ListItem>Sustainability</ListItem>

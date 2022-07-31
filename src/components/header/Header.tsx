@@ -7,12 +7,12 @@ import {
   faTaxi,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { DateRange } from "react-date-range";
+import { DateRange, Range } from "react-date-range";
 import { useState } from "react";
 import "react-date-range/dist/styles.css"; // main css file
 import "react-date-range/dist/theme/default.css"; // theme css file
 import { format } from "date-fns";
-// import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
 interface IHeaderProps {
@@ -27,16 +27,6 @@ interface IActiveStyleProps {
   active?: boolean;
 }
 
-interface Range {
-  startDate?: Date | undefined;
-  endDate?: Date | undefined;
-  color?: string | undefined;
-  key?: string | undefined;
-  autoFocus?: boolean | undefined;
-  disabled?: boolean | undefined;
-  showDateDisplay?: boolean | undefined;
-}
-
 interface OptionsState {
   adult: number;
   children: number;
@@ -46,7 +36,7 @@ interface OptionsState {
 type Operations = "i" | "d";
 
 const Header = ({ type }: IHeaderProps) => {
-  // const [destination, setDestination] = useState("");
+  const [destination, setDestination] = useState("");
   const [openDate, setOpenDate] = useState(false);
   const [dates, setDates] = useState<Range[]>([
     {
@@ -62,7 +52,7 @@ const Header = ({ type }: IHeaderProps) => {
     room: 1,
   });
 
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
   // const { user } = useContext(AuthContext);
 
   const handleOption = (name: keyof OptionsState, operation: Operations) => {
@@ -76,10 +66,10 @@ const Header = ({ type }: IHeaderProps) => {
 
   // const { dispatch } = useContext(SearchContext);
 
-  // const handleSearch = () => {
-  //   dispatch({ type: "NEW_SEARCH", payload: { destination, dates, options } });
-  //   navigate("/hotels", { state: { destination, dates, options } });
-  // };
+  const handleSearch = () => {
+    // dispatch({ type: "NEW_SEARCH", payload: { destination, dates, options } });
+    navigate("/hotels", { state: { destination, dates, options } });
+  };
 
   return (
     <Wrapper>
@@ -121,18 +111,15 @@ const Header = ({ type }: IHeaderProps) => {
                 <SearchInput
                   type="text"
                   placeholder="Where are you going?"
-                  //   onChange={(e) => setDestination(e.target.value)}
+                  onChange={(e) => setDestination(e.target.value)}
                 />
               </SearchItem>
               <SearchItem>
                 <FontAwesomeIcon icon={faCalendarDays} className="headerIcon" />
-                <SearchText
-                  onClick={() => setOpenDate(!openDate)}
-                  className="headerSearchText"
-                >{`${format(dates[0].startDate!, "MM/dd/yyyy")} to ${format(
-                  dates[0].endDate!,
+                <SearchText onClick={() => setOpenDate(!openDate)}>{`${format(
+                  dates[0].startDate!,
                   "MM/dd/yyyy"
-                )}`}</SearchText>
+                )} to ${format(dates[0].endDate!, "MM/dd/yyyy")}`}</SearchText>
                 {openDate && (
                   <DateRange
                     editableDateInputs={true}
@@ -212,11 +199,7 @@ const Header = ({ type }: IHeaderProps) => {
                 )}
               </SearchItem>
               <SearchItem>
-                <Button
-                // onClick={handleSearch}
-                >
-                  Search
-                </Button>
+                <Button onClick={handleSearch}>Search</Button>
               </SearchItem>
             </Search>
           </>
@@ -284,11 +267,10 @@ const Search = styled.div`
   bottom: -25px;
   width: 100%;
   max-width: 1024px;
+  .headerIcon {
+    color: lightgray;
+  }
 `;
-
-// const Icon = styled.i`
-//   color: lightgray;
-// `;
 
 const SearchItem = styled.div`
   display: flex;
@@ -298,6 +280,9 @@ const SearchItem = styled.div`
     position: absolute;
     top: 50px;
     z-index: 2;
+  }
+  .headerIcon {
+    color: lightgray;
   }
 `;
 
